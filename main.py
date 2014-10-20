@@ -33,8 +33,21 @@ def main(x, ys):
     legend = ax1.legend(loc='lower right', fancybox = True, framealpha = 0.8)
     plt.savefig('E:\OneDrive\Studia\V semestr\KCK\Projekt1\myplot.png', dpi=210)
     plt.show()
-    plt.close()
 
+
+def box(ys):
+
+    data = []
+    for i,y in ys.items():
+        data.append(y)
+    f = plt.figure(figsize = (3, 5))
+    ax = f.add_subplot(111)
+    ax.yaxis.tick_right()
+    ax.set_xticklabels(range(5), rotation=20)
+    plt.grid(color='gray', linewidth=0.5, linestyle=':')
+    plt.boxplot(data,1, labels=[n.split('.')[0] for n, y in ys.items()], showmeans=True, meanprops=dict(marker=(0,3,0), markerfacecolor='blue', fillstyle='right', alpha=1.0))
+    plt.savefig('boxplot.png', dpi=210)
+    # plt.show()
 
 if __name__ == '__main__':
     ys = {}
@@ -55,4 +68,5 @@ if __name__ == '__main__':
             print y
         # ys.append(y)
         ys[filename] = y
-    main(x,ys)
+    # main(x,ys)
+    box(ys)
