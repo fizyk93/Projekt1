@@ -12,12 +12,18 @@ font = {'family' : 'times new roman',
 plt.rc('font', **font)
 plt.rcParams['legend.fontsize'] = 10
 
+def markGen():
+    markers = ['o-', '^-', 'D-', 'd-', 's-']
+    while True:
+        for m in markers:
+            yield m
+
 def main(x, ys):
     print x.__len__()
     fig = plt.figure(figsize = (6.7, 5))
     plt.grid(color='gray', linewidth=0.5, linestyle=':')
 
-    ax1 = fig.add_subplot(111)
+    ax1 = fig.add_subplot(121)
     ax2 = ax1.twiny()
 
     ax1.set_xlabel(r'Rozegranych gier ($\times$1000)')
@@ -26,12 +32,14 @@ def main(x, ys):
     ax2.set_xticklabels([0, 40, 80, 120, 160, 200])
     ax2.set_xlabel(r'Pokolenie')
 
+    marker = markGen()
+
     for n, y in ys.items():
         print n
-        ax1.plot(x, y, label = n.split('.')[0])
+        ax1.plot(x, y, marker.next(), markevery=25, label = n.split('.')[0])
 
     legend = ax1.legend(loc='lower right', fancybox = True, framealpha = 0.8)
-    plt.savefig('E:\OneDrive\Studia\V semestr\KCK\Projekt1\myplot.png', dpi=210)
+    # plt.savefig('E:\OneDrive\Studia\V semestr\KCK\Projekt1\myplot.png', dpi=210)
     plt.show()
 
 
@@ -41,24 +49,23 @@ def box(ys):
     for i,y in ys.items():
         data.append(y)
     f = plt.figure(figsize = (3, 5))
-    ax = f.add_subplot(111)
-    ax.yaxis.tick_right()
-    ax.set_xticklabels(range(5), rotation=20)
+    ay = f.add_subplot(111)
+    ay.yaxis.tick_right()
+    ay.set_xticklabels(range(5), rotation=20)
     plt.grid(color='gray', linewidth=0.5, linestyle=':')
     plt.boxplot(data,1, labels=[n.split('.')[0] for n, y in ys.items()], showmeans=True, meanprops=dict(marker=(0,3,0), markerfacecolor='blue', fillstyle='right', alpha=1.0))
-    plt.savefig('boxplot.png', dpi=210)
+    # plt.savefig('boxplot.png', dpi=210)
     # plt.show()
 
 if __name__ == '__main__':
     ys = {}
     x = []
-    z = []
+    ys2 = {}
     for filename in sorted(glob.glob('*.csv')):
         with open(filename) as f:
             f.readline()
             x = []
             y = []
-            z = []
             for line in f:
                 # z.append(int(line.split(',')[0]))
                 x.append(int(line.split(',')[1])/1000)
@@ -67,6 +74,7 @@ if __name__ == '__main__':
                 # y=map(lambda x: float(x), line.split(',')[2:])
             print y
         # ys.append(y)
+        ys2[filename] = t
         ys[filename] = y
-    # main(x,ys)
-    box(ys)
+    main(x,ys)
+    # box(ys2)
